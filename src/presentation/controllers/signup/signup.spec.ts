@@ -1,8 +1,6 @@
 import { SignUpController } from './signup'
-import { MissingParamError, InvalidParamError, ServerError } from '../errors'
-import { EmailValidator } from '../protocols'
-import { AddAccount, AddAccountModel } from '../../domain/usecases/add-account'
-import { AccountModel } from '../../domain/models/account'
+import { MissingParamError, InvalidParamError, ServerError } from '../../errors'
+import { EmailValidator, AddAccountModel, AddAccount, AccountModel } from './signup-protocols'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -19,7 +17,7 @@ const makeAddAccount = (): AddAccount => {
       const fakeAccount = {
         id: 'valid_id',
         name: 'valid_name',
-        email: 'valid_email@email.com',
+        email: 'valid_email@mail.com',
         password: 'valid_password'
       }
       return fakeAccount
@@ -50,7 +48,7 @@ describe('Signup controller', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        email: 'anyemail@email.com',
+        email: 'anyemail@mail.com',
         password: 'anypassword',
         passwordConfirmation: 'anypassword'
       }
@@ -81,7 +79,7 @@ describe('Signup controller', () => {
     const httpRequest = {
       body: {
         name: 'anyname',
-        email: 'anyemail@email.com',
+        email: 'anyemail@mail.com',
         passwordConfirmation: 'anypassword'
       }
     }
@@ -96,7 +94,7 @@ describe('Signup controller', () => {
     const httpRequest = {
       body: {
         name: 'anyname',
-        email: 'anyemail@email.com',
+        email: 'anyemail@mail.com',
         password: 'anypassword'
       }
     }
@@ -111,7 +109,7 @@ describe('Signup controller', () => {
     const httpRequest = {
       body: {
         name: 'anyname',
-        email: 'anyemail@email.com',
+        email: 'anyemail@mail.com',
         password: 'anypassword',
         passwordConfirmation: 'invalidpassword'
       }
@@ -128,7 +126,7 @@ describe('Signup controller', () => {
     const httpRequest = {
       body: {
         name: 'anyname',
-        email: 'anyemail@email.com',
+        email: 'anyemail@mail.com',
         password: 'anypassword',
         passwordConfirmation: 'anypassword'
       }
@@ -145,14 +143,14 @@ describe('Signup controller', () => {
     const httpRequest = {
       body: {
         name: 'anyname',
-        email: 'anyemail@email.com',
+        email: 'anyemail@mail.com',
         password: 'anypassword',
         passwordConfirmation: 'anypassword'
       }
     }
 
     sut.handle(httpRequest)
-    expect(isValidSpy).toHaveBeenCalledWith('anyemail@email.com')
+    expect(isValidSpy).toHaveBeenCalledWith('anyemail@mail.com')
   })
 
   test('Should return 500 if EmailValidator throws.', () => {
@@ -163,7 +161,7 @@ describe('Signup controller', () => {
     const httpRequest = {
       body: {
         name: 'anyname',
-        email: 'anyemail@email.com',
+        email: 'anyemail@mail.com',
         password: 'anypassword',
         passwordConfirmation: 'anypassword'
       }
@@ -180,7 +178,7 @@ describe('Signup controller', () => {
     const httpRequest = {
       body: {
         name: 'anyname',
-        email: 'anyemail@email.com',
+        email: 'anyemail@mail.com',
         password: 'anypassword',
         passwordConfirmation: 'anypassword'
       }
@@ -189,7 +187,7 @@ describe('Signup controller', () => {
     sut.handle(httpRequest)
     expect(addSpy).toHaveBeenCalledWith({
       name: 'anyname',
-      email: 'anyemail@email.com',
+      email: 'anyemail@mail.com',
       password: 'anypassword'
     })
   })
